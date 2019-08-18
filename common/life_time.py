@@ -19,6 +19,11 @@ class LifeTime(object):
 
     @property
     def sum_times(self):
+        """
+        计算生命总时长的方法
+        Returns: 生命总时间的对象
+
+        """
         return self.end_day_date - self.birthday_date
 
     @property
@@ -47,5 +52,6 @@ class LifeTime(object):
             "age": self.age,
             "sum_days": self.sum_times.days,
             "remainder_days": self.remainder_times.days,
-            "used_days": self.used_times.days
+            "used_days": self.used_times.days,
+            "end_day": self.end_day_date
         }
