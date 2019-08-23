@@ -53,5 +53,5 @@ class LifeTime(object):
             "sum_days": self.sum_times.days,
             "remainder_days": self.remainder_times.days,
             "used_days": self.used_times.days,
-            "end_day": self.end_day_date
+            "end_day": datetime.datetime.strftime(self.end_day_date, "%Y-%m-%d %H:%M:%S")
         }

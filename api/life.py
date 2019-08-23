@@ -78,3 +78,55 @@ class LifeUserLogin(Resource):
             "data": { "session": session }
         }
 
+class LifeSetting(Resource):
+    """ 配置接口类 """
+
+    parse = reqparse.RequestParser()
+    parse.add_argument('session', type=str, location=['form','args'], help='')
+    parse.add_argument('birthday', type=str, location='form', help='')
+    parse.add_argument('age', type=int, location='form', help='')
+
+    @marshal_with(RESPONSE)
+    def get(self):
+        args = self.parse.parse_args()
+        session = args.get('session')
+        if (not session) or (not LIFE_REDIS.conn.exists(session)):
+            return {
+                "code": 204,
+                "msg": "session 不存在或已过期，请先登录！",
+                "data": {}
+            }
+        setting = LIFE_REDIS.get_setting_by_session(session)
+        return {
+            "code": 100,
+            "msg": "获取成功",
+            "data": setting
+        }
+
+    @marshal_with(RESPONSE)
+    def post(self):
+        args = self.parse.parse_args()
+        session = args.get('session')
+        if (not session) or (not LIFE_REDIS.conn.exists(session)):
+            return {
+                "code": 204,
+                "msg": "session 不存在或已过期，请先登录！",
+                "data": {}
+            }
+
+        birthday = args.get('birthday')
+        age = args.get('age') or 80
+        if not birthday:
+            return {
+                "code": 107,
+                "msg": "请上传生日字段！",
+                "data": {}
+            }
+
+        life_time = LifeTime(birthday, age)
+        LIFE_REDIS.add_setting(LIFE_REDIS.conn.get(session), life_time.data)
+        return {
+            "code": 100,
+            "msg": "设置成功！",
+            "data": life_time.data
+        }

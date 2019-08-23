@@ -9,7 +9,7 @@
 from flask_restful import Api
 from .user_info import UserInfo
 from .request_parser_test import Test, Todo
-from .life import LifeUserLogin, LifeUserSign
+from .life import LifeUserLogin, LifeUserSign, LifeSetting
 
 def create_api(app):
     api = Api(app)
@@ -18,3 +18,4 @@ def create_api(app):
     api.add_resource(Todo, '/todo')
     api.add_resource(LifeUserSign, '/life/sign')
     api.add_resource(LifeUserLogin, '/life/login')
+    api.add_resource(LifeSetting, '/life/setting')
